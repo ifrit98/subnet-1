@@ -36,7 +36,7 @@ def get_config():
     # Using command-line arguments allows users to customize various miner settings.
     parser = argparse.ArgumentParser()
     # TODO(developer): Adds your custom miner arguments to the parser.
-    parser.add_argument( '--axon.port', type=int, default=8099, help='Port to run the axon on.' )
+    parser.add_argument( '--axon.port', type=int, default=8098, help='Port to run the axon on.' )
     # Subtensor network to connect to
     parser.add_argument( '--subtensor.network', default='test', help='Bittensor network to connect to.' )
     # Chain endpoint to connect to
@@ -96,6 +96,10 @@ def main( config ):
     # metagraph provides the network's current state, holding state about other participants in a subnet.
     metagraph = subtensor.metagraph(config.netuid)
     bt.logging.info(f"Metagraph: {metagraph}")
+
+    # Grab UID of the wallet.
+    uid = metagraph.hotkeys.index(wallet.hotkey.ss58_address)
+    bt.logging.info(f"UID: {uid}")
 
     if wallet.hotkey.ss58_address not in metagraph.hotkeys:
         bt.logging.error(f"\nYour validator: {wallet} if not registered to chain connection: {subtensor} \nRun btcli register and try again. ")
